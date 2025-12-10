@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestor de contraseñas</title>
+  <style>
+    #app {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+    }
+    input[type="range"] {
+      width: 300px;
+    }
+    input[type="text"] {
+      width: 300px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background-color: greenyellow;
+    }
+    input[type="checkbox"] {
+        margin: 10px;
+    }
+   </style>
+</head>
+<body>
+
+  <div id="app">
+    <h1>Gestor de Contraseñas</h1>
+    <input type="text" v-model="contraseña" v-bind:disabled="true">
+    <button><b>Copiar</b></button><br>
+    <label for="barra">Longitud de la contraseña: {{longitud}}</label><br>
+    <input type="range" id="barra" min="8" max="32"  v-model="longitud"><br>
+    <label><input type="checkbox" name="minusculas" checked> minusculas</label>
+    <label><input type="checkbox" name="mayusculas" > mayusculas</label><br>
+    <label><input type="checkbox" name="simbolos" > simbolos</label>
+    <label><input type="checkbox" name="numeros" > numero</label><br>
+    <button  @click="generar"><b>Generar Contraseña</b></button>
+
+  </div>
+
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          contraseña: "",
+          longitud: 20,
+          minuscula: "abcdefghijklmnopqrstuvwxyz",
+          mayusculas: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+          simbolos: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
+          numeros: "0123456789"
+        }
+      },
+      methods:{
+        generar(){
+              let caracteres = "";
+
+              const minusculasCheck = document.querySelector('input[name="minusculas"]').checked;
+              const mayusculasCheck = document.querySelector('input[name="mayusculas"]').checked;
+              const simbolosCheck = document.querySelector('input[name="simbolos"]').checked;
+              const numerosCheck = document.querySelector('input[name="numeros"]').checked;
+
+              if (minusculasCheck) caracteres += this.minuscula;
+              if (mayusculasCheck) caracteres += this.mayusculas;
+              if (simbolosCheck) caracteres += this.simbolos;
+              if (numerosCheck) caracteres += this.numeros;
+
+              let pass = "";
+              for (let i = 0; i < this.longitud; i++) {
+                const randomIndex = Math.floor(Math.random() * caracteres.length);
+                pass += caracteres[randomIndex];
+              }
+              this.contraseña = pass;
+        }
+      }
+    }).mount('#app')
+  </script>
+
+</body>
+</html>
